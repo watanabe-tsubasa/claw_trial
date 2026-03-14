@@ -30,6 +30,87 @@ ollama側からopenclawの設定を開始して実行
 
 最初は`/home/codespace/.openclaw/workspace`の中で動いているので、`pwd`で出てくる`/workspaces/claw_trial`の中で作業するようにopenclawに伝えて、Next.jsのコーディングを実施。
 
+## LINEとopenclawの接続
+
+### 1. line pluginのセットアップ
+
+```sh
+openclaw configure --section channels
+```
+
+これで、lineを許可させる
+
+```sh
+openclaw plugins list
+```
+
+でlineが繋がってればOK
+
+### 2. gateway
+
+```sh
+openclaw gateway --force
+```
+
+### 3. `openclaw.json`の編集
+
+`~/.openclaw/openclaw.json`を `code`で開く. 
+うまく行っていれば、
+
+```json
+  "channels": {
+    "line": {
+      "enabled": true
+    }
+  },
+```
+
+となっているので
+
+```json
+  "channels": {
+    "line": {
+      "channelAccessToken": "LINE developersからコピペ",
+      "channelSecret": "LINE developersからコピペ",
+      "dmPolicy": "pairing",
+      "enabled": true
+    }
+  },
+```
+
+という感じに改変。
+
+### 4. LINE developersへのwebhook urlの記載
+
+path parametorで`/line/webhook`
+
+### 5. メッセージを送る
+
+LINEから送ると、
+
+```text
+OpenClaw: access not configured.
+
+Your lineUserId: U439dc3807475b0b2091a3a712ab6fb90
+
+Pairing code: *****
+
+Ask the bot owner to approve with:
+openclaw pairing approve line *****
+```
+
+みたいな感じになるので、
+
+```sh
+openclaw pairing approve line *****
+```
+
+を実行
+
+> 参考
+>
+> https://zenn.dev/n0bisuke/books/openclaw-linebot/viewer/1-2_setup_line
+
 ## 以下、デフォルトのNext.jsのREADME.md
 
 ````md
